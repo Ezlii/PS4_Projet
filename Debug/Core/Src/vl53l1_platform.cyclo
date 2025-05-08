@@ -1,0 +1,10 @@
+../Core/Src/vl53l1_platform.c:74:14:VL53L1_WriteMulti	2
+../Core/Src/vl53l1_platform.c:84:14:VL53L1_ReadMulti	2
+../Core/Src/vl53l1_platform.c:95:14:VL53L1_WrByte	1
+../Core/Src/vl53l1_platform.c:99:14:VL53L3CX_RdByte	1
+../Core/Src/vl53l1_platform.c:103:14:VL53L3CX_WaitMs	1
+../Core/Src/vl53l1_platform.c:108:14:VL53L1_RdWord	2
+../Core/Src/vl53l1_platform.c:134:14:VL53L1_GetTimerFrequency	1
+../Core/Src/vl53l1_platform.c:143:14:VL53L1_GetTimerValue	1
+../Core/Src/vl53l1_platform.c:156:15:VL53L1_GpioInterruptEnable	1
+../Core/Src/vl53l1_platform.c:167:15:VL53L1_GpioInterruptDisable	1
