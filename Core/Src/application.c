@@ -129,6 +129,12 @@ void application(void){
 	  }
 }
 
+static const FSM_State_Handler_t FSM_State_Handler[eNbrOfMCStates] =
+{
+{eTR_MOTINIT, handle_TR_MOTINIT_EntryFct, handle_TR_MOTINIT, nullptr},
+{eTR_MOTOFF, handle_TR_MOTOFF_EntryFct, handle_TR_MOTOFF, nullptr},
+{eTR_MOTON,  handle_TR_MOTON_EntryFct, handle_TR_MOTON, nullptr}
+};
 
 static void tran(MC_States_t newState)
 {
