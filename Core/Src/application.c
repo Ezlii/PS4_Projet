@@ -36,8 +36,10 @@ void application(void){
 
 	     if (status == VL53L1_ERROR_NONE) {
 	    	 // connection success
+	    	 printf("Connection success\n");
 	     } else {
 	    	// no connection
+	    	 printf("No connection\n");
 	     }
 
 	     // Sensor initialisieren
@@ -125,4 +127,37 @@ void application(void){
 		  }
 		  HAL_Delay(10);
 	  }
+}
+
+
+static void tran(MC_States_t newState)
+{
+    if (nullptr != FSM_State_Handler[myState].pExitHandler)
+    {
+        FSM_State_Handler[myState].pExitHandler();
+    }
+    myState = newState;
+    if (nullptr != FSM_State_Handler[myState].pEntryHandler)
+    {
+        FSM_State_Handler[myState].pEntryHandler();
+    }
+}
+
+void MotorControl_FSM(EventsTypes_t event)
+{
+    assert(myState<eNbrOfMCStates);
+    if (nullptr != FSM_State_Handler[myState].pRunHandler)
+    {
+        FSM_State_Handler[myState].pRunHandler(myState, event);
+    }
+}
+
+
+//----------------------------------------------------------------------------
+// Implementations
+//----------------------------------------------------------------------------
+
+MC_States_t MotorControl_getActualState(void)
+{
+  return myState;
 }

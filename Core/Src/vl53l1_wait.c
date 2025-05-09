@@ -85,8 +85,7 @@
 		fmt, ##__VA_ARGS__)
 
 
-VL53L1_Error VL53L1_wait_for_boot_completion(
-	VL53L1_DEV     Dev)
+VL53L1_Error VL53L1_wait_for_boot_completion(VL53L1_DEV     Dev)
 {
 
 	/* Waits for firmware boot to finish
@@ -133,8 +132,7 @@ VL53L1_Error VL53L1_wait_for_boot_completion(
 }
 
 
-VL53L1_Error VL53L1_wait_for_firmware_ready(
-	VL53L1_DEV     Dev)
+VL53L1_Error VL53L1_wait_for_firmware_ready(VL53L1_DEV  Dev)
 {
 
 	/* If in timed mode or single shot then check firmware is ready

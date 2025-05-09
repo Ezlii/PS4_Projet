@@ -222,9 +222,7 @@ VL53L1_Error VL53L1_is_new_data_ready(
  * @return  "Other error code"    See ::VL53L1_Error
  */
 
-VL53L1_Error VL53L1_poll_for_boot_completion(
-	VL53L1_DEV      Dev,
-	uint32_t        timeout_ms);
+VL53L1_Error VL53L1_poll_for_boot_completion(VL53L1_DEV Dev,uint32_t timeout_ms);
 
 
 /**
