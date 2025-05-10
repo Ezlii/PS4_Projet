@@ -11,6 +11,7 @@
 #include "EventsTypes.h"
 #include "FSM_Handler.h"
 #include "EventsBuffer.h"
+#include "stm32wbxx_it.h"
 
 #define SW_PRESSED 0
 #define nullptr 0

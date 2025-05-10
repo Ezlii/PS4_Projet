@@ -27,6 +27,8 @@ VL53L1_Error status;
 static FSM_States_t myState = eTR_first;
 static EventsBuffer_t myEventBuffer;
 volatile int32_t encoderCount = 0;
+volatile nbr_of_interrupts = 0;
+
 
 
 void application(void){
@@ -92,7 +94,7 @@ void application(void){
 	  SH1106_WriteString(32, 0, "Epreuve 1", FONT_6x8);
 	  SH1106_WriteString(0, 2, "Tension: 8.67 V", FONT_6x8);
 	  SH1106_WriteString(0, 4, "Vitesse: 12.5 km/h", FONT_6x8);
-	  SH1106_WriteString(0, 6, "nbr. de levages: 3", FONT_6x8);
+	  //SH1106_WriteString(0, 6, "nbr. de levages: 3", FONT_6x8);
 
 
 	  while(1){
@@ -100,10 +102,12 @@ void application(void){
 
 		  // Event Producer
 		  eventsManagement_Push(&myEventBuffer, eTimeTickElapsed_10ms);
-
+		  char encoder_string[10];
+		  sprintf(encoder_string, "%ld", encoderCount);  // Ergebnis: "1234"
+		  SH1106_WriteString(0, 6, encoder_string, FONT_6x8);
 		  // Event Consumer
 		  TrotinettControlTask(&myEventBuffer);
-		  HAL_Delay(10);
+		  HAL_Delay(20);
 	  }
 }
 
@@ -174,18 +178,21 @@ FSM_States_t MotorControl_getActualState(void)
 // Callback-Funktion (von HAL automatisch aufgerufen)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if (GPIO_Pin == GPIO_PIN_0) // CLK (z. B. PA0)
+    if (GPIO_Pin == Rotary_Encoder_SCK_Pin)
     {
-        // Lies DT-Pin (z. B. PA1)
-        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
+        static uint32_t last_interrupt_time = 0;
+        uint32_t now = HAL_GetTick();
+
+        if ((now - last_interrupt_time) > 1)
         {
-            // Drehrichtung: Rechts
-            encoderCount++;
-        }
-        else
-        {
-            // Drehrichtung: Links
-            encoderCount--;
+            last_interrupt_time = now;
+
+            GPIO_PinState dt = HAL_GPIO_ReadPin(Rotary_Encoder_DT_GPIO_Port, Rotary_Encoder_DT_Pin);
+
+            if (dt == GPIO_PIN_SET)
+                encoderCount++;
+            else
+                encoderCount--;
         }
     }
 }
