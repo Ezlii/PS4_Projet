@@ -17,7 +17,6 @@
 volatile int32_t lastEncoderValue = 0;
 extern COM_InitTypeDef BspCOMInit;
 extern SPI_HandleTypeDef hspi1;
-extern TIM_HandleTypeDef htim2;
 extern I2C_HandleTypeDef hi2c3;
 
 VL53L1_Dev_t dev;
@@ -27,6 +26,7 @@ VL53L1_Error status;
 
 static FSM_States_t myState = eTR_first;
 static EventsBuffer_t myEventBuffer;
+volatile int32_t encoderCount = 0;
 
 
 void application(void){
@@ -66,7 +66,7 @@ void application(void){
 	     VL53L1_StartMeasurement(Dev);
 
 
-
+	     /*
 	     while (1)
 		 {
 			 // Hier gibt es KEIN CheckForDataReady – also direkt Daten abholen
@@ -85,16 +85,7 @@ void application(void){
 		 }
 
 
-
-	  // Starten des Encoders (alle Kanäle)
-	  if (HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL) != HAL_OK)
-	  {
-		  // Fehlerbehandlung, falls Start fehlschlägt
-		  Error_Handler();
-	  }
-
-	  // Ersten Zählerstand sichern
-	  lastEncoderValue = __HAL_TIM_GET_COUNTER(&htim2);
+		*/
 
 
 
@@ -170,11 +161,31 @@ void Trotinette_FSM(EventsTypes_t event)
 }
 
 
-//----------------------------------------------------------------------------
-// Implementations
-//----------------------------------------------------------------------------
-
 FSM_States_t MotorControl_getActualState(void)
 {
   return myState;
+}
+
+
+//
+// Interrupts
+//¨
+
+// Callback-Funktion (von HAL automatisch aufgerufen)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == GPIO_PIN_0) // CLK (z. B. PA0)
+    {
+        // Lies DT-Pin (z. B. PA1)
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
+        {
+            // Drehrichtung: Rechts
+            encoderCount++;
+        }
+        else
+        {
+            // Drehrichtung: Links
+            encoderCount--;
+        }
+    }
 }
