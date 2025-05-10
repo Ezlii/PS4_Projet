@@ -5,4 +5,4 @@
 ../Core/Src/main.c:217:13:MX_I2C3_Init	4
 ../Core/Src/main.c:265:13:MX_SPI1_Init	2
 ../Core/Src/main.c:305:13:MX_GPIO_Init	1
-../Core/Src/main.c:368:6:Error_Handler	1
+../Core/Src/main.c:365:6:Error_Handler	1

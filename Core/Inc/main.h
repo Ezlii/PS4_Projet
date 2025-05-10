@@ -71,11 +71,12 @@ void Error_Handler(void);
 #define Data_Command_GPIO_Port GPIOB
 #define SW_Rotary_Encoder_Pin GPIO_PIN_2
 #define SW_Rotary_Encoder_GPIO_Port GPIOC
-#define Rotary_Encoder_DT_Pin GPIO_PIN_1
-#define Rotary_Encoder_DT_GPIO_Port GPIOA
 #define Rotary_Encoder_SCK_Pin GPIO_PIN_2
 #define Rotary_Encoder_SCK_GPIO_Port GPIOA
 #define Rotary_Encoder_SCK_EXTI_IRQn EXTI2_IRQn
+#define Rotary_Encoder_DT_Pin GPIO_PIN_3
+#define Rotary_Encoder_DT_GPIO_Port GPIOA
+#define Rotary_Encoder_DT_EXTI_IRQn EXTI3_IRQn
 #define USB_DM_Pin GPIO_PIN_11
 #define USB_DM_GPIO_Port GPIOA
 #define USB_DP_Pin GPIO_PIN_12

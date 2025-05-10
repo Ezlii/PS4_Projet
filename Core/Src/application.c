@@ -27,7 +27,6 @@ VL53L1_Error status;
 static FSM_States_t myState = eTR_first;
 static EventsBuffer_t myEventBuffer;
 volatile int32_t encoderCount = 0;
-volatile nbr_of_interrupts = 0;
 
 
 
@@ -103,7 +102,7 @@ void application(void){
 		  // Event Producer
 		  eventsManagement_Push(&myEventBuffer, eTimeTickElapsed_10ms);
 		  char encoder_string[10];
-		  sprintf(encoder_string, "%ld", encoderCount);  // Ergebnis: "1234"
+		  snprintf(encoder_string, sizeof(encoder_string), "%3ld", encoderCount);
 		  SH1106_WriteString(0, 6, encoder_string, FONT_6x8);
 		  // Event Consumer
 		  TrotinettControlTask(&myEventBuffer);
@@ -178,21 +177,27 @@ FSM_States_t MotorControl_getActualState(void)
 // Callback-Funktion (von HAL automatisch aufgerufen)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if (GPIO_Pin == Rotary_Encoder_SCK_Pin)
+    static uint8_t last_state = 0;
+
+    // Wir reagieren auf beide Pins: CLK oder DT
+    if (GPIO_Pin == Rotary_Encoder_SCK_Pin || GPIO_Pin == Rotary_Encoder_DT_Pin)
     {
-        static uint32_t last_interrupt_time = 0;
-        uint32_t now = HAL_GetTick();
+        // Aktuellen Zustand einlesen
+        uint8_t clk = HAL_GPIO_ReadPin(Rotary_Encoder_SCK_GPIO_Port, Rotary_Encoder_SCK_Pin);
+        uint8_t dt  = HAL_GPIO_ReadPin(Rotary_Encoder_DT_GPIO_Port,  Rotary_Encoder_DT_Pin);
 
-        if ((now - last_interrupt_time) > 1)
-        {
-            last_interrupt_time = now;
+        uint8_t new_state = (clk << 1) | dt;
 
-            GPIO_PinState dt = HAL_GPIO_ReadPin(Rotary_Encoder_DT_GPIO_Port, Rotary_Encoder_DT_Pin);
+        // Tabelle der gültigen Zustandsübergänge (Gray Code)
+        int8_t encoder_table[4][4] = {
+            {  0, -1,  1,  0 },
+            {  1,  0,  0, -1 },
+            { -1,  0,  0,  1 },
+            {  0,  1, -1,  0 }
+        };
 
-            if (dt == GPIO_PIN_SET)
-                encoderCount++;
-            else
-                encoderCount--;
-        }
+        int8_t delta = encoder_table[last_state][new_state];
+        encoderCount += delta;
+        last_state = new_state;
     }
 }
