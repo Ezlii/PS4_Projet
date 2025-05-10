@@ -8,22 +8,21 @@
 #ifndef INC_FSM_HANDLER_H_
 #define INC_FSM_HANDLER_H_
 
-typedef enum
-{
-  eTR_MOTINIT,
-  eTR_MOTOFF,
-  eTR_MOTON,
+#include "EventsTypes.h"
 
-  eNbrOfMCStates
-} MC_States_t;
+typedef enum{
+	eTR_first,
+	eTR_second,
+	eNbrOfFSMStates
+}FSM_States_t;
 
 typedef void (*EntryFct)(void);
-typedef void (*RunFct)(MC_States_t state, EventsTypes_t event);
+typedef void (*RunFct)(FSM_States_t state, EventsTypes_t event);
 typedef void (*ExitFct)(void);
 
 typedef struct
 {
-    MC_States_t state;
+	FSM_States_t state;
     EntryFct pEntryHandler;
     RunFct pRunHandler;
     ExitFct pExitHandler;

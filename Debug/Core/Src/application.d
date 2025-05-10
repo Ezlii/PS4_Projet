@@ -53,7 +53,8 @@ Core/Src/application.o: ../Core/Src/application.c \
  ../Core/Inc/vl53l1_platform.h ../Core/Inc/vl53l1_platform_log.h \
  ../Core/Inc/vl53l1_platform_ipp_imports.h \
  ../Core/Inc/vl53l1_platform_user_data.h \
- ../Core/Inc/vl53l1_preset_setup.h ../Core/Inc/vl53l1_platform.h
+ ../Core/Inc/vl53l1_preset_setup.h ../Core/Inc/vl53l1_platform.h \
+ ../Core/Inc/FSM_Handler.h ../Core/Inc/EventsTypes.h
 ../Core/Inc/application.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal.h:
@@ -118,3 +119,5 @@ Core/Src/application.o: ../Core/Src/application.c \
 ../Core/Inc/vl53l1_platform_user_data.h:
 ../Core/Inc/vl53l1_preset_setup.h:
 ../Core/Inc/vl53l1_platform.h:
+../Core/Inc/FSM_Handler.h:
+../Core/Inc/EventsTypes.h:

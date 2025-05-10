@@ -9,7 +9,9 @@
 #include "display.h"
 #include "vl53l1_api.h"
 #include "vl53l1_platform.h"
+#include "FSM_Handler.h"
 
+#define nullptr 0
 
 volatile int32_t lastEncoderValue = 0;
 extern COM_InitTypeDef BspCOMInit;
@@ -21,6 +23,8 @@ VL53L1_Dev_t dev;
 VL53L1_DEV Dev = &dev;
 VL53L1_DeviceInfo_t deviceInfo;
 VL53L1_Error status;
+
+static FSM_States_t myState = eTR_first;
 
 
 void application(void){
@@ -129,14 +133,30 @@ void application(void){
 	  }
 }
 
-static const FSM_State_Handler_t FSM_State_Handler[eNbrOfMCStates] =
+
+static void handle_TR_first_EntryFct(void){
+
+}
+
+static void handle_first(FSM_States_t state, EventsTypes_t event){
+
+}
+
+static void handle_TR_second_EntryFct(void){
+
+}
+
+static void handle_second(FSM_States_t state, EventsTypes_t event){
+
+}
+
+static const FSM_State_Handler_t FSM_State_Handler[eNbrOfFSMStates] =
 {
-{eTR_MOTINIT, handle_TR_MOTINIT_EntryFct, handle_TR_MOTINIT, nullptr},
-{eTR_MOTOFF, handle_TR_MOTOFF_EntryFct, handle_TR_MOTOFF, nullptr},
-{eTR_MOTON,  handle_TR_MOTON_EntryFct, handle_TR_MOTON, nullptr}
+{eTR_first, handle_TR_first_EntryFct, handle_first, nullptr},
+{eTR_second, handle_TR_second_EntryFct, handle_second, nullptr},
 };
 
-static void tran(MC_States_t newState)
+static void tran(FSM_States_t newState)
 {
     if (nullptr != FSM_State_Handler[myState].pExitHandler)
     {
@@ -151,7 +171,7 @@ static void tran(MC_States_t newState)
 
 void MotorControl_FSM(EventsTypes_t event)
 {
-    assert(myState<eNbrOfMCStates);
+    //assert(myState<eNbrOfFSMStates);
     if (nullptr != FSM_State_Handler[myState].pRunHandler)
     {
         FSM_State_Handler[myState].pRunHandler(myState, event);
@@ -163,7 +183,7 @@ void MotorControl_FSM(EventsTypes_t event)
 // Implementations
 //----------------------------------------------------------------------------
 
-MC_States_t MotorControl_getActualState(void)
+FSM_States_t MotorControl_getActualState(void)
 {
   return myState;
 }
