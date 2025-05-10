@@ -8,11 +8,21 @@
 #ifndef INC_APPLICATION_H_
 #define INC_APPLICATION_H_
 
+#include "EventsTypes.h"
+#include "FSM_Handler.h"
+#include "EventsBuffer.h"
+
 #define SW_PRESSED 0
-
-
+#define nullptr 0
 
 void application(void);
 
+void TrotinettControlTask(EventsBuffer_t* pBuff);
+
+// FSM-Funktion zur Verarbeitung von Events
+void Trotinette_FSM(EventsTypes_t event);
+
+// Gibt den aktuellen FSM-Zustand zurück
+FSM_States_t MotorControl_getActualState(void);
 
 #endif /* INC_APPLICATION_H_ */

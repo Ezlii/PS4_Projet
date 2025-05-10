@@ -1,8 +1,9 @@
-../Core/Src/application.c:30:6:application	40	static
-../Core/Src/application.c:137:13:handle_TR_first_EntryFct	4	static
-../Core/Src/application.c:141:13:handle_first	16	static
-../Core/Src/application.c:145:13:handle_TR_second_EntryFct	4	static
-../Core/Src/application.c:149:13:handle_second	16	static
-../Core/Src/application.c:159:13:tran	16	static
-../Core/Src/application.c:172:6:MotorControl_FSM	16	static
-../Core/Src/application.c:186:14:MotorControl_getActualState	4	static
+../Core/Src/application.c:32:6:application	40	static
+../Core/Src/application.c:120:13:handle_TR_first_EntryFct	4	static
+../Core/Src/application.c:124:13:handle_first	16	static
+../Core/Src/application.c:128:13:handle_TR_second_EntryFct	4	static
+../Core/Src/application.c:132:13:handle_second	16	static
+../Core/Src/application.c:142:13:tran	16	static
+../Core/Src/application.c:155:6:TrotinettControlTask	24	static
+../Core/Src/application.c:163:6:Trotinette_FSM	16	static
+../Core/Src/application.c:177:14:MotorControl_getActualState	4	static

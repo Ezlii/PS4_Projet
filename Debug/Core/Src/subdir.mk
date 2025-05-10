@@ -5,6 +5,8 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/Src/EventsBuffer.c \
+../Core/Src/EventsManagement.c \
 ../Core/Src/ToFSensor.c \
 ../Core/Src/application.c \
 ../Core/Src/display.c \
@@ -31,6 +33,8 @@ C_SRCS += \
 ../Core/Src/vl53l1_wait.c 
 
 OBJS += \
+./Core/Src/EventsBuffer.o \
+./Core/Src/EventsManagement.o \
 ./Core/Src/ToFSensor.o \
 ./Core/Src/application.o \
 ./Core/Src/display.o \
@@ -57,6 +61,8 @@ OBJS += \
 ./Core/Src/vl53l1_wait.o 
 
 C_DEPS += \
+./Core/Src/EventsBuffer.d \
+./Core/Src/EventsManagement.d \
 ./Core/Src/ToFSensor.d \
 ./Core/Src/application.d \
 ./Core/Src/display.d \
@@ -90,7 +96,7 @@ Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/ToFSensor.cyclo ./Core/Src/ToFSensor.d ./Core/Src/ToFSensor.o ./Core/Src/ToFSensor.su ./Core/Src/application.cyclo ./Core/Src/application.d ./Core/Src/application.o ./Core/Src/application.su ./Core/Src/display.cyclo ./Core/Src/display.d ./Core/Src/display.o ./Core/Src/display.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/stm32wbxx_hal_msp.cyclo ./Core/Src/stm32wbxx_hal_msp.d ./Core/Src/stm32wbxx_hal_msp.o ./Core/Src/stm32wbxx_hal_msp.su ./Core/Src/stm32wbxx_it.cyclo ./Core/Src/stm32wbxx_it.d ./Core/Src/stm32wbxx_it.o ./Core/Src/stm32wbxx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32wbxx.cyclo ./Core/Src/system_stm32wbxx.d ./Core/Src/system_stm32wbxx.o ./Core/Src/system_stm32wbxx.su ./Core/Src/vl53l1_api.cyclo ./Core/Src/vl53l1_api.d ./Core/Src/vl53l1_api.o ./Core/Src/vl53l1_api.su ./Core/Src/vl53l1_api_calibration.cyclo ./Core/Src/vl53l1_api_calibration.d ./Core/Src/vl53l1_api_calibration.o ./Core/Src/vl53l1_api_calibration.su ./Core/Src/vl53l1_api_core.cyclo ./Core/Src/vl53l1_api_core.d ./Core/Src/vl53l1_api_core.o ./Core/Src/vl53l1_api_core.su ./Core/Src/vl53l1_api_debug.cyclo ./Core/Src/vl53l1_api_debug.d ./Core/Src/vl53l1_api_debug.o ./Core/Src/vl53l1_api_debug.su ./Core/Src/vl53l1_api_preset_modes.cyclo ./Core/Src/vl53l1_api_preset_modes.d ./Core/Src/vl53l1_api_preset_modes.o ./Core/Src/vl53l1_api_preset_modes.su ./Core/Src/vl53l1_api_strings.cyclo ./Core/Src/vl53l1_api_strings.d ./Core/Src/vl53l1_api_strings.o ./Core/Src/vl53l1_api_strings.su ./Core/Src/vl53l1_core.cyclo ./Core/Src/vl53l1_core.d ./Core/Src/vl53l1_core.o ./Core/Src/vl53l1_core.su ./Core/Src/vl53l1_core_support.cyclo ./Core/Src/vl53l1_core_support.d ./Core/Src/vl53l1_core_support.o ./Core/Src/vl53l1_core_support.su ./Core/Src/vl53l1_error_strings.cyclo ./Core/Src/vl53l1_error_strings.d ./Core/Src/vl53l1_error_strings.o ./Core/Src/vl53l1_error_strings.su ./Core/Src/vl53l1_platform.cyclo ./Core/Src/vl53l1_platform.d ./Core/Src/vl53l1_platform.o ./Core/Src/vl53l1_platform.su ./Core/Src/vl53l1_platform_init.cyclo ./Core/Src/vl53l1_platform_init.d ./Core/Src/vl53l1_platform_init.o ./Core/Src/vl53l1_platform_init.su ./Core/Src/vl53l1_platform_log.cyclo ./Core/Src/vl53l1_platform_log.d ./Core/Src/vl53l1_platform_log.o ./Core/Src/vl53l1_platform_log.su ./Core/Src/vl53l1_register_funcs.cyclo ./Core/Src/vl53l1_register_funcs.d ./Core/Src/vl53l1_register_funcs.o ./Core/Src/vl53l1_register_funcs.su ./Core/Src/vl53l1_silicon_core.cyclo ./Core/Src/vl53l1_silicon_core.d ./Core/Src/vl53l1_silicon_core.o ./Core/Src/vl53l1_silicon_core.su ./Core/Src/vl53l1_wait.cyclo ./Core/Src/vl53l1_wait.d ./Core/Src/vl53l1_wait.o ./Core/Src/vl53l1_wait.su
+	-$(RM) ./Core/Src/EventsBuffer.cyclo ./Core/Src/EventsBuffer.d ./Core/Src/EventsBuffer.o ./Core/Src/EventsBuffer.su ./Core/Src/EventsManagement.cyclo ./Core/Src/EventsManagement.d ./Core/Src/EventsManagement.o ./Core/Src/EventsManagement.su ./Core/Src/ToFSensor.cyclo ./Core/Src/ToFSensor.d ./Core/Src/ToFSensor.o ./Core/Src/ToFSensor.su ./Core/Src/application.cyclo ./Core/Src/application.d ./Core/Src/application.o ./Core/Src/application.su ./Core/Src/display.cyclo ./Core/Src/display.d ./Core/Src/display.o ./Core/Src/display.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/stm32wbxx_hal_msp.cyclo ./Core/Src/stm32wbxx_hal_msp.d ./Core/Src/stm32wbxx_hal_msp.o ./Core/Src/stm32wbxx_hal_msp.su ./Core/Src/stm32wbxx_it.cyclo ./Core/Src/stm32wbxx_it.d ./Core/Src/stm32wbxx_it.o ./Core/Src/stm32wbxx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32wbxx.cyclo ./Core/Src/system_stm32wbxx.d ./Core/Src/system_stm32wbxx.o ./Core/Src/system_stm32wbxx.su ./Core/Src/vl53l1_api.cyclo ./Core/Src/vl53l1_api.d ./Core/Src/vl53l1_api.o ./Core/Src/vl53l1_api.su ./Core/Src/vl53l1_api_calibration.cyclo ./Core/Src/vl53l1_api_calibration.d ./Core/Src/vl53l1_api_calibration.o ./Core/Src/vl53l1_api_calibration.su ./Core/Src/vl53l1_api_core.cyclo ./Core/Src/vl53l1_api_core.d ./Core/Src/vl53l1_api_core.o ./Core/Src/vl53l1_api_core.su ./Core/Src/vl53l1_api_debug.cyclo ./Core/Src/vl53l1_api_debug.d ./Core/Src/vl53l1_api_debug.o ./Core/Src/vl53l1_api_debug.su ./Core/Src/vl53l1_api_preset_modes.cyclo ./Core/Src/vl53l1_api_preset_modes.d ./Core/Src/vl53l1_api_preset_modes.o ./Core/Src/vl53l1_api_preset_modes.su ./Core/Src/vl53l1_api_strings.cyclo ./Core/Src/vl53l1_api_strings.d ./Core/Src/vl53l1_api_strings.o ./Core/Src/vl53l1_api_strings.su ./Core/Src/vl53l1_core.cyclo ./Core/Src/vl53l1_core.d ./Core/Src/vl53l1_core.o ./Core/Src/vl53l1_core.su ./Core/Src/vl53l1_core_support.cyclo ./Core/Src/vl53l1_core_support.d ./Core/Src/vl53l1_core_support.o ./Core/Src/vl53l1_core_support.su ./Core/Src/vl53l1_error_strings.cyclo ./Core/Src/vl53l1_error_strings.d ./Core/Src/vl53l1_error_strings.o ./Core/Src/vl53l1_error_strings.su ./Core/Src/vl53l1_platform.cyclo ./Core/Src/vl53l1_platform.d ./Core/Src/vl53l1_platform.o ./Core/Src/vl53l1_platform.su ./Core/Src/vl53l1_platform_init.cyclo ./Core/Src/vl53l1_platform_init.d ./Core/Src/vl53l1_platform_init.o ./Core/Src/vl53l1_platform_init.su ./Core/Src/vl53l1_platform_log.cyclo ./Core/Src/vl53l1_platform_log.d ./Core/Src/vl53l1_platform_log.o ./Core/Src/vl53l1_platform_log.su ./Core/Src/vl53l1_register_funcs.cyclo ./Core/Src/vl53l1_register_funcs.d ./Core/Src/vl53l1_register_funcs.o ./Core/Src/vl53l1_register_funcs.su ./Core/Src/vl53l1_silicon_core.cyclo ./Core/Src/vl53l1_silicon_core.d ./Core/Src/vl53l1_silicon_core.o ./Core/Src/vl53l1_silicon_core.su ./Core/Src/vl53l1_wait.cyclo ./Core/Src/vl53l1_wait.d ./Core/Src/vl53l1_wait.o ./Core/Src/vl53l1_wait.su
 
 .PHONY: clean-Core-2f-Src
 

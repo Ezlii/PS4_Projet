@@ -1,3 +1,5 @@
+"./Core/Src/EventsBuffer.o"
+"./Core/Src/EventsManagement.o"
 "./Core/Src/ToFSensor.o"
 "./Core/Src/application.o"
 "./Core/Src/display.o"

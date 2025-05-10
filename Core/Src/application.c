@@ -10,8 +10,9 @@
 #include "vl53l1_api.h"
 #include "vl53l1_platform.h"
 #include "FSM_Handler.h"
+#include "EventsManagement.h"
 
-#define nullptr 0
+
 
 volatile int32_t lastEncoderValue = 0;
 extern COM_InitTypeDef BspCOMInit;
@@ -25,6 +26,7 @@ VL53L1_DeviceInfo_t deviceInfo;
 VL53L1_Error status;
 
 static FSM_States_t myState = eTR_first;
+static EventsBuffer_t myEventBuffer;
 
 
 void application(void){
@@ -64,8 +66,6 @@ void application(void){
 	     VL53L1_StartMeasurement(Dev);
 
 
-	     uint8_t dataReady = 0;
-	     uint16_t distance_mm;
 
 	     while (1)
 		 {
@@ -105,30 +105,13 @@ void application(void){
 
 
 	  while(1){
-		  // Aktuellen Zählerstand abrufen
-		  int32_t currentEncoderValue = __HAL_TIM_GET_COUNTER(&htim2);
 
-		  // Prüfen, ob sich der Zählerstand geändert hat
-		 if (currentEncoderValue != lastEncoderValue)
-		 {
-			 if (currentEncoderValue > lastEncoderValue)
-			 {
-				 // Encoder wurde nach rechts gedreht
-				 SH1106_WriteString_AllAtOnce(0, 0, "rechts", FONT_6x8);
-			 }
-			 else
-			 {
-				 // Encoder wurde nach links gedreht
-				 SH1106_WriteString_AllAtOnce(0, 0, "liks", FONT_6x8);
-			 }
-			 // Aktualisieren des letzten Zählerstandes
-			 lastEncoderValue = currentEncoderValue;
-		 }
 
-		  if (GPIO_PIN_RESET == HAL_GPIO_ReadPin(SW_Rotary_Encoder_GPIO_Port, SW_Rotary_Encoder_Pin))
-		  {
-			  SH1106_WriteString_AllAtOnce(0, 0, "pushed", FONT_6x8);
-		  }
+		  // Event Producer
+		  eventsManagement_Push(&myEventBuffer, eTimeTickElapsed_10ms);
+
+		  // Event Consumer
+		  TrotinettControlTask(&myEventBuffer);
 		  HAL_Delay(10);
 	  }
 }
@@ -169,7 +152,15 @@ static void tran(FSM_States_t newState)
     }
 }
 
-void MotorControl_FSM(EventsTypes_t event)
+void TrotinettControlTask(EventsBuffer_t* pBuff){
+	EventsTypes_t event;
+	while(eventsManagement_Pop(pBuff, &event)){
+		Trotinette_FSM(event);
+	}
+}
+
+
+void Trotinette_FSM(EventsTypes_t event)
 {
     //assert(myState<eNbrOfFSMStates);
     if (nullptr != FSM_State_Handler[myState].pRunHandler)
