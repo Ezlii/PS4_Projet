@@ -207,10 +207,19 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 		case eTimeTickElapsed_10ms:
 			break;
 		case eRotaryEncoder_moved_left:
+			selected_height_cm--;
+			char height_str[8];
+			snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
+			SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 			break;
 		case eRotaryEncoder_moved_right:
+			selected_height_cm++;
+			char height_str[8];
+			snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
+			SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 			break;
 		case eRotaryEncoder_prssed:
+			switch(eTR_eEpreuve_1_ChargeEnergy);
 			break;
 		default:
 			break;
@@ -219,7 +228,7 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 
 // === eEpreuve_1_ChargeEnergy ===
 static void handle_eEpreuve_1_ChargeEnergy_EntryFct(void) {
-
+	SH1106_Clear();
 }
 
 static void handle_eEpreuve_1_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
