@@ -4,6 +4,7 @@
  *  Created on: Apr 24, 2025
  *      Author: elias
  */
+/*====================  INCLUDES  ====================*/
 #include  "application.h"
 #include "main.h"
 #include "display.h"
@@ -12,30 +13,49 @@
 #include "FSM_Handler.h"
 #include "EventsManagement.h"
 
-typedef enum{
-eEpreuve_1,
-eEpreuve_2,
-eEpreuve_3,
+/*====================  TYPEDEFS & ENUMS  ====================*/
 
-eNbrofEpreuves
-}selected_Epreuve_t;
+typedef enum {
+    eEpreuve_1,
+    eEpreuve_2,
+    eEpreuve_3,
 
-static void tran(FSM_States_t newState);
+    eNbrofEpreuves
+} selected_Epreuve_t;
 
-volatile int32_t lastEncoderValue = 0;
+/*====================  EXTERNAL VARIABLES  ====================*/
+
 extern COM_InitTypeDef BspCOMInit;
 extern SPI_HandleTypeDef hspi1;
 extern I2C_HandleTypeDef hi2c3;
+extern TIM_HandleTypeDef htim2;
 
+/*====================  GLOBAL VARIABLES  ====================*/
+
+// Volatile globale Variablen
+volatile int32_t encoderCount = 0;
+volatile int32_t lastEncoderValue = 0;
+
+// Nicht volatile globale Variablen
 VL53L1_Dev_t dev;
 VL53L1_DEV Dev = &dev;
 VL53L1_DeviceInfo_t deviceInfo;
 VL53L1_Error status;
 
+/*====================  STATIC VARIABLES  ====================*/
+
 static FSM_States_t myState = eTR_eStart;
 static EventsBuffer_t myEventBuffer;
-volatile int32_t encoderCount = 0;
 static selected_Epreuve_t currentEpreuve;
+static uint32_t selected_height_cm;
+
+/*====================  STATIC FUNCTION PROTOTYPES  ====================*/
+
+static void tran(FSM_States_t newState);
+static void updateEpreuveDisplay(void);
+
+/*====================  FUNCTION DEFINITIONS  ====================*/
+// (Hier würden dann die Funktionsdefinitionen folgen)
 
 
 
@@ -99,13 +119,7 @@ void application(void){
 
 
 		*/
-
-
-
-	  SH1106_WriteString(32, 0, "Epreuve 1", FONT_6x8);
-	  SH1106_WriteString(0, 2, "Tension: 8.67 V", FONT_6x8);
-	  SH1106_WriteString(0, 4, "Vitesse: 12.5 km/h", FONT_6x8);
-	  //SH1106_WriteString(0, 6, "nbr. de levages: 3", FONT_6x8);
+	     HAL_TIM_Base_Start_IT(&htim2);
 
 
 	  while(1){
@@ -141,6 +155,10 @@ static void handle_eStart(FSM_States_t state, EventsTypes_t event) {
 // === eSelectEpreuve ===
 static void handle_eSelectEpreuve_EntryFct(void) {
 	currentEpreuve = eEpreuve_1;
+	SH1106_WriteString_AllAtOnce(0,0,"Select Epreuve:",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,2,"-> Epreuve 1",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,4,"   Epreuve 2",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,6,"   Epreuve 3",FONT_6x8);
 }
 
 static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
@@ -148,10 +166,12 @@ static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
 		case eTimeTickElapsed_10ms:
 			break;
 		case eRotaryEncoder_moved_right:
-			(currentEpreuve < eNbrofEpreuves - 1) ? currentEpreuve++ : eEpreuve_1;
+			currentEpreuve = (currentEpreuve < eNbrofEpreuves - 1) ? currentEpreuve + 1 : eEpreuve_1;
+			updateEpreuveDisplay();
 			break;
 		case eRotaryEncoder_moved_left:
-			(currentEpreuve > eEpreuve_1) ? currentEpreuve-- : eEpreuve_3;
+			currentEpreuve = (currentEpreuve > eEpreuve_1) ? currentEpreuve -1 : eEpreuve_3;
+			updateEpreuveDisplay();
 			break;
 		case eRotaryEncoder_prssed:
 			switch(currentEpreuve){
@@ -174,12 +194,23 @@ static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
 
 // === eEpreuve_1 ===
 static void handle_eEpreuve_1_EntryFct(void) {
-
+	selected_height_cm = 100;
+	SH1106_Clear();
+	SH1106_WriteString_AllAtOnce(0, 0, "select height in cm:", FONT_6x8);
+	char height_str[8];
+	snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
+	SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 }
 
 static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 	switch(state){
 		case eTimeTickElapsed_10ms:
+			break;
+		case eRotaryEncoder_moved_left:
+			break;
+		case eRotaryEncoder_moved_right:
+			break;
+		case eRotaryEncoder_prssed:
 			break;
 		default:
 			break;
@@ -396,6 +427,12 @@ FSM_States_t MotorControl_getActualState(void)
   return myState;
 }
 
+static void updateEpreuveDisplay(void) {
+	SH1106_WriteString_AllAtOnce(0,2, (currentEpreuve == eEpreuve_1) ? "-> Epreuve 1" : "   Epreuve 1", FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,4, (currentEpreuve == eEpreuve_2) ? "-> Epreuve 2" : "   Epreuve 2", FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,6, (currentEpreuve == eEpreuve_3) ? "-> Epreuve 3" : "   Epreuve 3", FONT_6x8);
+}
+
 
 //
 // Interrupts
@@ -405,17 +442,16 @@ FSM_States_t MotorControl_getActualState(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     static uint8_t last_state = 0;
+    static int32_t last_processed_encoder = 0;
 
-    // Wir reagieren auf beide Pins: CLK oder DT
     if (GPIO_Pin == Rotary_Encoder_SCK_Pin || GPIO_Pin == Rotary_Encoder_DT_Pin)
     {
-        // Aktuellen Zustand einlesen
         uint8_t clk = HAL_GPIO_ReadPin(Rotary_Encoder_SCK_GPIO_Port, Rotary_Encoder_SCK_Pin);
         uint8_t dt  = HAL_GPIO_ReadPin(Rotary_Encoder_DT_GPIO_Port,  Rotary_Encoder_DT_Pin);
 
         uint8_t new_state = (clk << 1) | dt;
 
-        // Tabelle der gültigen Zustandsübergänge (Gray Code)
+        // Zustandsübergangs-Tabelle (Gray Code)
         int8_t encoder_table[4][4] = {
             {  0, -1,  1,  0 },
             {  1,  0,  0, -1 },
@@ -426,5 +462,42 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         int8_t delta = encoder_table[last_state][new_state];
         encoderCount += delta;
         last_state = new_state;
+
+        // Prüfen, ob 4er-Schritte erreicht wurden
+        int32_t diff = encoderCount - last_processed_encoder;
+        if (diff >= 4)
+        {
+            last_processed_encoder += 4;
+            EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_moved_right);
+        }
+        else if (diff <= -4)
+        {
+            last_processed_encoder -= 4;
+            EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_moved_left);
+        }
+        /*
+         while ((encoderCount - last_processed_encoder) >= 4)
+		{
+			last_processed_encoder += 4;
+			EncoderTurnedRight();
+		}
+		while ((encoderCount - last_processed_encoder) <= -4)
+		{
+			last_processed_encoder -= 4;
+			EncoderTurnedLeft();
+		}
+		 */
+    }
+}
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t tickCount = 0;
+        if (++tickCount >= TICK_COUNT_10ms){
+        	EventsBuffer_addData(&myEventBuffer, eTimeTickElapsed_10ms);
+        }
     }
 }
