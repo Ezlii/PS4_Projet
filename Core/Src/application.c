@@ -12,7 +12,15 @@
 #include "FSM_Handler.h"
 #include "EventsManagement.h"
 
+typedef enum{
+eEpreuve_1,
+eEpreuve_2,
+eEpreuve_3,
 
+eNbrofEpreuves
+}selected_Epreuve_t;
+
+static void tran(FSM_States_t newState);
 
 volatile int32_t lastEncoderValue = 0;
 extern COM_InitTypeDef BspCOMInit;
@@ -24,9 +32,13 @@ VL53L1_DEV Dev = &dev;
 VL53L1_DeviceInfo_t deviceInfo;
 VL53L1_Error status;
 
-static FSM_States_t myState = eTR_first;
+static FSM_States_t myState = eTR_eStart;
 static EventsBuffer_t myEventBuffer;
 volatile int32_t encoderCount = 0;
+static selected_Epreuve_t currentEpreuve;
+
+
+
 
 
 
@@ -111,27 +123,242 @@ void application(void){
 }
 
 
-static void handle_TR_first_EntryFct(void){
+// === eStart ===
+static void handle_eStart_EntryFct(void) {
 
 }
 
-static void handle_first(FSM_States_t state, EventsTypes_t event){
+static void handle_eStart(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			tran(eTR_eSelectEpreuve);
+			break;
+		default:
+			break;
+	}
+}
+
+// === eSelectEpreuve ===
+static void handle_eSelectEpreuve_EntryFct(void) {
+	currentEpreuve = eEpreuve_1;
+}
+
+static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		case eRotaryEncoder_moved_right:
+			(currentEpreuve < eNbrofEpreuves - 1) ? currentEpreuve++ : eEpreuve_1;
+			break;
+		case eRotaryEncoder_moved_left:
+			(currentEpreuve > eEpreuve_1) ? currentEpreuve-- : eEpreuve_3;
+			break;
+		case eRotaryEncoder_prssed:
+			switch(currentEpreuve){
+				case eEpreuve_1:
+					tran(eTR_eEpreuve_1);
+					break;
+				case eEpreuve_2:
+					tran(eTR_eEpreuve_2);
+					break;
+				case eEpreuve_3:
+					tran(eTR_eEpreuve_3);
+					break;
+				default:
+					break;
+			}
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_1 ===
+static void handle_eEpreuve_1_EntryFct(void) {
 
 }
 
-static void handle_TR_second_EntryFct(void){
+static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_1_ChargeEnergy ===
+static void handle_eEpreuve_1_ChargeEnergy_EntryFct(void) {
 
 }
 
-static void handle_second(FSM_States_t state, EventsTypes_t event){
+static void handle_eEpreuve_1_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_1_StartLiftingProcess ===
+static void handle_eEpreuve_1_StartLiftingProcess_EntryFct(void) {
 
 }
+
+static void handle_eEpreuve_1_StartLiftingProcess(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_1_StopLiftingProcess ===
+static void handle_eEpreuve_1_StopLiftingProcess_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_1_StopLiftingProcess(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_1_LowerProcess ===
+static void handle_eEpreuve_1_LowerProcess_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_1_LowerProcess(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_2 ===
+static void handle_eEpreuve_2_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_2(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_3 ===
+static void handle_eEpreuve_3_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_3(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_3_ChargeEnergy ===
+static void handle_eEpreuve_3_ChargeEnergy_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_3_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_3_StartLiftingProcess ===
+static void handle_eEpreuve_3_StartLiftingProcess_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_3_StartLiftingProcess(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_3_StopLiftingProcess ===
+static void handle_eEpreuve_3_StopLiftingProcess_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_3_StopLiftingProcess(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_3_LowerProcess ===
+static void handle_eEpreuve_3_LowerProcess_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_3_LowerProcess(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
+// === eEpreuve_3_EndofTime ===
+static void handle_eEpreuve_3_EndofTime_EntryFct(void) {
+
+}
+
+static void handle_eEpreuve_3_EndofTime(FSM_States_t state, EventsTypes_t event) {
+	switch(state){
+		case eTimeTickElapsed_10ms:
+			break;
+		default:
+			break;
+	}
+}
+
 
 static const FSM_State_Handler_t FSM_State_Handler[eNbrOfFSMStates] =
 {
-{eTR_first, handle_TR_first_EntryFct, handle_first, nullptr},
-{eTR_second, handle_TR_second_EntryFct, handle_second, nullptr},
+    {eTR_eStart, handle_eStart_EntryFct, handle_eStart, nullptr},
+    {eTR_eSelectEpreuve, handle_eSelectEpreuve_EntryFct, handle_eSelectEpreuve, nullptr},
+    {eTR_eEpreuve_1, handle_eEpreuve_1_EntryFct, handle_eEpreuve_1, nullptr},
+    {eTR_eEpreuve_1_ChargeEnergy, handle_eEpreuve_1_ChargeEnergy_EntryFct, handle_eEpreuve_1_ChargeEnergy, nullptr},
+    {eTR_eEpreuve_1_StartLiftingProcess, handle_eEpreuve_1_StartLiftingProcess_EntryFct, handle_eEpreuve_1_StartLiftingProcess, nullptr},
+    {eTR_eEpreuve_1_StopLiftingProcess, handle_eEpreuve_1_StopLiftingProcess_EntryFct, handle_eEpreuve_1_StopLiftingProcess, nullptr},
+    {eTR_eEpreuve_1_LowerProcess, handle_eEpreuve_1_LowerProcess_EntryFct, handle_eEpreuve_1_LowerProcess, nullptr},
+    {eTR_eEpreuve_2, handle_eEpreuve_2_EntryFct, handle_eEpreuve_2, nullptr},
+    {eTR_eEpreuve_3, handle_eEpreuve_3_EntryFct, handle_eEpreuve_3, nullptr},
+    {eTR_eEpreuve_3_ChargeEnergy, handle_eEpreuve_3_ChargeEnergy_EntryFct, handle_eEpreuve_3_ChargeEnergy, nullptr},
+    {eTR_eEpreuve_3_StartLiftingProcess, handle_eEpreuve_3_StartLiftingProcess_EntryFct, handle_eEpreuve_3_StartLiftingProcess, nullptr},
+    {eTR_eEpreuve_3_StopLiftingProcess, handle_eEpreuve_3_StopLiftingProcess_EntryFct, handle_eEpreuve_3_StopLiftingProcess, nullptr},
+    {eTR_eEpreuve_3_LowerProcess, handle_eEpreuve_3_LowerProcess_EntryFct, handle_eEpreuve_3_LowerProcess, nullptr},
+    {eTR_eEpreuve_3_EndofTime, handle_eEpreuve_3_EndofTime_EntryFct, handle_eEpreuve_3_EndofTime, nullptr}
 };
+
 
 static void tran(FSM_States_t newState)
 {

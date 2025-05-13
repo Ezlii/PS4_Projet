@@ -10,11 +10,24 @@
 
 #include "EventsTypes.h"
 
-typedef enum{
-	eTR_first,
-	eTR_second,
+typedef enum {
+	eTR_eStart,
+	eTR_eSelectEpreuve,
+	eTR_eEpreuve_1,
+	eTR_eEpreuve_1_ChargeEnergy,
+	eTR_eEpreuve_1_StartLiftingProcess,
+	eTR_eEpreuve_1_StopLiftingProcess,
+	eTR_eEpreuve_1_LowerProcess,
+	eTR_eEpreuve_2,
+	eTR_eEpreuve_3,
+	eTR_eEpreuve_3_ChargeEnergy,
+	eTR_eEpreuve_3_StartLiftingProcess,
+	eTR_eEpreuve_3_StopLiftingProcess,
+	eTR_eEpreuve_3_LowerProcess,
+	eTR_eEpreuve_3_EndofTime,
 	eNbrOfFSMStates
-}FSM_States_t;
+} FSM_States_t;
+
 
 typedef void (*EntryFct)(void);
 typedef void (*RunFct)(FSM_States_t state, EventsTypes_t event);
