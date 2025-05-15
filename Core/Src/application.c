@@ -48,6 +48,7 @@ static FSM_States_t myState = eTR_eStart;
 static EventsBuffer_t myEventBuffer;
 static selected_Epreuve_t currentEpreuve;
 static uint32_t selected_height_cm;
+static char height_str[8];
 
 /*====================  STATIC FUNCTION PROTOTYPES  ====================*/
 
@@ -197,7 +198,6 @@ static void handle_eEpreuve_1_EntryFct(void) {
 	selected_height_cm = 100;
 	SH1106_Clear();
 	SH1106_WriteString_AllAtOnce(0, 0, "select height in cm:", FONT_6x8);
-	char height_str[8];
 	snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
 	SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 }
@@ -208,13 +208,11 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 			break;
 		case eRotaryEncoder_moved_left:
 			selected_height_cm--;
-			char height_str[8];
 			snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
 			SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 			break;
 		case eRotaryEncoder_moved_right:
 			selected_height_cm++;
-			char height_str[8];
 			snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
 			SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 			break;
@@ -235,6 +233,8 @@ static void handle_eEpreuve_1_ChargeEnergy(FSM_States_t state, EventsTypes_t eve
 	switch(state){
 		case eTimeTickElapsed_10ms:
 			break;
+		case eRotaryEncoder_prssed:
+			switch(eTR_eEpreuve_1_StartLiftingProcess);
 		default:
 			break;
 	}
@@ -284,13 +284,27 @@ static void handle_eEpreuve_1_LowerProcess(FSM_States_t state, EventsTypes_t eve
 
 // === eEpreuve_2 ===
 static void handle_eEpreuve_2_EntryFct(void) {
-
+	selected_height_cm = 25;
+	SH1106_Clear();
+	SH1106_WriteString_AllAtOnce(0, 0, "select height in cm:", FONT_6x8);
+	snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
+	SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 }
 
 static void handle_eEpreuve_2(FSM_States_t state, EventsTypes_t event) {
 	switch(state){
 		case eTimeTickElapsed_10ms:
 			break;
+		case eRotaryEncoder_moved_left:
+					(selected_height_cm >= 25) ? selected_height_cm-- : 75 ;
+					snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
+					SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
+					break;
+				case eRotaryEncoder_moved_right:
+					(selected_height_cm <= 75) ? selected_height_cm++ : 25;
+					snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
+					SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
+					break;
 		default:
 			break;
 	}
