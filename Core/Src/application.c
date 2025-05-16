@@ -156,8 +156,8 @@ static void handle_eSelectEpreuve_EntryFct(void) {
 	currentEpreuve = eEpreuve_1;
 	SH1106_WriteString_AllAtOnce(0,0,"Select Epreuve:",FONT_6x8);
 	SH1106_WriteString_AllAtOnce(0,2,"-> Epreuve 1",FONT_6x8);
-	SH1106_WriteString_AllAtOnce(0,3,"   Epreuve 2",FONT_6x8);
-	SH1106_WriteString_AllAtOnce(0,4,"   Epreuve 3",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,4,"   Epreuve 2",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,6,"   Epreuve 3",FONT_6x8);
 }
 
 static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
@@ -166,17 +166,11 @@ static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
 			break;
 		case eRotaryEncoder_moved_right:
 			currentEpreuve = (currentEpreuve < eNbrofEpreuves - 1) ? currentEpreuve + 1 : eEpreuve_1;
-			re_position ++;
-			snprintf(height_str, sizeof(height_str), "%3ld", re_position);
-			SH1106_WriteString_AllAtOnce(0, 5, height_str, FONT_6x8);
-			//updateEpreuveDisplay();
+			updateEpreuveDisplay();
 			break;
 		case eRotaryEncoder_moved_left:
 			currentEpreuve = (currentEpreuve > eEpreuve_1) ? currentEpreuve -1 : eEpreuve_3;
-			re_position --;
-			snprintf(height_str, sizeof(height_str), "%3ld", re_position);
-			SH1106_WriteString_AllAtOnce(0, 5, height_str, FONT_6x8);
-			//updateEpreuveDisplay();
+			updateEpreuveDisplay();
 			break;
 		case eRotaryEncoder_prssed:
 			switch(currentEpreuve){
