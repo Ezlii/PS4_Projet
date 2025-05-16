@@ -69,9 +69,11 @@ void Display_Initialize(void)                                                   
 void send_command_display (uint8_t command)                                     //Command an das Display schreiben
 {
 	HAL_GPIO_WritePin(Data_Command_GPIO_Port, Data_Command_Pin, GPIO_PIN_RESET);
-    HAL_Delay(10);
+    //HAL_Delay(10);
+	for (volatile uint32_t i = 0; i < 100; i++);
     HAL_SPI_Transmit(&hspi1,& command, 1, 10);
-    HAL_Delay(10);
+    //HAL_Delay(10);
+    for (volatile uint32_t i = 0; i < 100; i++);
     HAL_GPIO_WritePin(Data_Command_GPIO_Port, Data_Command_Pin, GPIO_PIN_SET);
 }
 

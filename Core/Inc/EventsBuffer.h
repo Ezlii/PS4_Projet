@@ -16,7 +16,7 @@
 
 enum
 {
-  eMAX_BUFFER_SIZE = 20
+  eMAX_BUFFER_SIZE = 100
 };
 
 typedef struct

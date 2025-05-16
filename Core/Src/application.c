@@ -49,11 +49,13 @@ static EventsBuffer_t myEventBuffer;
 static selected_Epreuve_t currentEpreuve;
 static uint32_t selected_height_cm;
 static char height_str[8];
+static uint32_t re_position=10;
 
 /*====================  STATIC FUNCTION PROTOTYPES  ====================*/
 
 static void tran(FSM_States_t newState);
 static void updateEpreuveDisplay(void);
+
 
 /*====================  FUNCTION DEFINITIONS  ====================*/
 // (Hier würden dann die Funktionsdefinitionen folgen)
@@ -127,13 +129,9 @@ void application(void){
 
 
 		  // Event Producer
-		  eventsManagement_Push(&myEventBuffer, eTimeTickElapsed_10ms);
-		  char encoder_string[10];
-		  snprintf(encoder_string, sizeof(encoder_string), "%3ld", encoderCount);
-		  SH1106_WriteString(0, 6, encoder_string, FONT_6x8);
+
 		  // Event Consumer
 		  TrotinettControlTask(&myEventBuffer);
-		  HAL_Delay(20);
 	  }
 }
 
@@ -144,7 +142,7 @@ static void handle_eStart_EntryFct(void) {
 }
 
 static void handle_eStart(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			tran(eTR_eSelectEpreuve);
 			break;
@@ -158,21 +156,27 @@ static void handle_eSelectEpreuve_EntryFct(void) {
 	currentEpreuve = eEpreuve_1;
 	SH1106_WriteString_AllAtOnce(0,0,"Select Epreuve:",FONT_6x8);
 	SH1106_WriteString_AllAtOnce(0,2,"-> Epreuve 1",FONT_6x8);
-	SH1106_WriteString_AllAtOnce(0,4,"   Epreuve 2",FONT_6x8);
-	SH1106_WriteString_AllAtOnce(0,6,"   Epreuve 3",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,3,"   Epreuve 2",FONT_6x8);
+	SH1106_WriteString_AllAtOnce(0,4,"   Epreuve 3",FONT_6x8);
 }
 
 static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		case eRotaryEncoder_moved_right:
 			currentEpreuve = (currentEpreuve < eNbrofEpreuves - 1) ? currentEpreuve + 1 : eEpreuve_1;
-			updateEpreuveDisplay();
+			re_position ++;
+			snprintf(height_str, sizeof(height_str), "%3ld", re_position);
+			SH1106_WriteString_AllAtOnce(0, 5, height_str, FONT_6x8);
+			//updateEpreuveDisplay();
 			break;
 		case eRotaryEncoder_moved_left:
 			currentEpreuve = (currentEpreuve > eEpreuve_1) ? currentEpreuve -1 : eEpreuve_3;
-			updateEpreuveDisplay();
+			re_position --;
+			snprintf(height_str, sizeof(height_str), "%3ld", re_position);
+			SH1106_WriteString_AllAtOnce(0, 5, height_str, FONT_6x8);
+			//updateEpreuveDisplay();
 			break;
 		case eRotaryEncoder_prssed:
 			switch(currentEpreuve){
@@ -203,7 +207,7 @@ static void handle_eEpreuve_1_EntryFct(void) {
 }
 
 static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		case eRotaryEncoder_moved_left:
@@ -217,7 +221,7 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 			SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 			break;
 		case eRotaryEncoder_prssed:
-			switch(eTR_eEpreuve_1_ChargeEnergy);
+			tran(eTR_eEpreuve_1_ChargeEnergy);
 			break;
 		default:
 			break;
@@ -230,11 +234,12 @@ static void handle_eEpreuve_1_ChargeEnergy_EntryFct(void) {
 }
 
 static void handle_eEpreuve_1_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		case eRotaryEncoder_prssed:
-			switch(eTR_eEpreuve_1_StartLiftingProcess);
+			tran(eTR_eEpreuve_1_StartLiftingProcess);
+			break;
 		default:
 			break;
 	}
@@ -246,7 +251,7 @@ static void handle_eEpreuve_1_StartLiftingProcess_EntryFct(void) {
 }
 
 static void handle_eEpreuve_1_StartLiftingProcess(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -260,7 +265,7 @@ static void handle_eEpreuve_1_StopLiftingProcess_EntryFct(void) {
 }
 
 static void handle_eEpreuve_1_StopLiftingProcess(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -274,7 +279,7 @@ static void handle_eEpreuve_1_LowerProcess_EntryFct(void) {
 }
 
 static void handle_eEpreuve_1_LowerProcess(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -292,7 +297,7 @@ static void handle_eEpreuve_2_EntryFct(void) {
 }
 
 static void handle_eEpreuve_2(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		case eRotaryEncoder_moved_left:
@@ -316,7 +321,7 @@ static void handle_eEpreuve_3_EntryFct(void) {
 }
 
 static void handle_eEpreuve_3(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -330,7 +335,7 @@ static void handle_eEpreuve_3_ChargeEnergy_EntryFct(void) {
 }
 
 static void handle_eEpreuve_3_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -344,7 +349,7 @@ static void handle_eEpreuve_3_StartLiftingProcess_EntryFct(void) {
 }
 
 static void handle_eEpreuve_3_StartLiftingProcess(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -358,7 +363,7 @@ static void handle_eEpreuve_3_StopLiftingProcess_EntryFct(void) {
 }
 
 static void handle_eEpreuve_3_StopLiftingProcess(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -372,7 +377,7 @@ static void handle_eEpreuve_3_LowerProcess_EntryFct(void) {
 }
 
 static void handle_eEpreuve_3_LowerProcess(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -386,7 +391,7 @@ static void handle_eEpreuve_3_EndofTime_EntryFct(void) {
 }
 
 static void handle_eEpreuve_3_EndofTime(FSM_States_t state, EventsTypes_t event) {
-	switch(state){
+	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
 		default:
@@ -465,7 +470,8 @@ static void updateEpreuveDisplay(void) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     static uint8_t last_state = 0;
-    static int32_t last_processed_encoder = 0;
+    static int8_t step_accumulator = 0;
+    static int8_t last_delta = 0;
 
     if (GPIO_Pin == Rotary_Encoder_SCK_Pin || GPIO_Pin == Rotary_Encoder_DT_Pin)
     {
@@ -474,44 +480,43 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
         uint8_t new_state = (clk << 1) | dt;
 
-        // Zustandsübergangs-Tabelle (Gray Code)
-        int8_t encoder_table[4][4] = {
-            {  0, -1,  1,  0 },
-            {  1,  0,  0, -1 },
-            { -1,  0,  0,  1 },
-            {  0,  1, -1,  0 }
+        static const int8_t transition_table[4][4] = {
+            {  0,  -1,  1,   0 },
+            {  1,   0,  0,  -1 },
+            { -1,   0,  0,   1 },
+            {  0,   1, -1,   0 }
         };
 
-        int8_t delta = encoder_table[last_state][new_state];
-        encoderCount += delta;
-        last_state = new_state;
+        int8_t delta = transition_table[last_state][new_state];
 
-        // Prüfen, ob 4er-Schritte erreicht wurden
-        int32_t diff = encoderCount - last_processed_encoder;
-        if (diff >= 4)
+        if (delta != 0)
         {
-            last_processed_encoder += 4;
-            EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_moved_right);
+            // 👉 Reset bei Richtungswechsel
+            if ((last_delta > 0 && delta < 0) || (last_delta < 0 && delta > 0)) {
+                step_accumulator = 0;
+            }
+
+            step_accumulator += delta;
+            last_delta = delta;
+
+            if (step_accumulator >= 4)
+            {
+                step_accumulator = 0;
+                EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_moved_right);
+            }
+            else if (step_accumulator <= -4)
+            {
+                step_accumulator = 0;
+                EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_moved_left);
+            }
         }
-        else if (diff <= -4)
-        {
-            last_processed_encoder -= 4;
-            EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_moved_left);
-        }
-        /*
-         while ((encoderCount - last_processed_encoder) >= 4)
-		{
-			last_processed_encoder += 4;
-			EncoderTurnedRight();
-		}
-		while ((encoderCount - last_processed_encoder) <= -4)
-		{
-			last_processed_encoder -= 4;
-			EncoderTurnedLeft();
-		}
-		 */
+
+        last_state = new_state;
     }
 }
+
+
+
 
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -521,6 +526,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         static uint8_t tickCount = 0;
         if (++tickCount >= TICK_COUNT_10ms){
         	EventsBuffer_addData(&myEventBuffer, eTimeTickElapsed_10ms);
+        	tickCount = 0;
         }
     }
 }

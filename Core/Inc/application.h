@@ -24,6 +24,8 @@ void TrotinettControlTask(EventsBuffer_t* pBuff);
 // FSM-Funktion zur Verarbeitung von Events
 void Trotinette_FSM(EventsTypes_t event);
 
+void TrotinettControlTask(EventsBuffer_t* pBuff);
+
 // Gibt den aktuellen FSM-Zustand zurück
 FSM_States_t MotorControl_getActualState(void);
 
