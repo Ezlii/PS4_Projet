@@ -22,12 +22,12 @@ extern "C"
 #endif
 
 #if !defined(VL53L1DevDataGet)
-#warning "PALDevDataGet is deprecated define VL53L1DevDataGet instead"
+//#warning "PALDevDataGet is deprecated define VL53L1DevDataGet instead"
 #define VL53L1DevDataGet(Dev, field) (Dev->Data.field)
 #endif
 
 #if !defined(VL53L1DevDataSet)
-#warning "PALDevDataSet is deprecated define VL53L1DevDataSet instead"
+//#warning "PALDevDataSet is deprecated define VL53L1DevDataSet instead"
 #define VL53L1DevDataSet(Dev, field, data) ((Dev->Data.field) = (data))
 #endif
 

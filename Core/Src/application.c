@@ -49,6 +49,8 @@ static EventsBuffer_t myEventBuffer;
 static selected_Epreuve_t currentEpreuve;
 static uint32_t selected_height_cm;
 static char height_str[8];
+static volatile VL53L1_RangingMeasurementData_t RangingData;
+
 
 /*====================  STATIC FUNCTION PROTOTYPES  ====================*/
 
@@ -71,7 +73,7 @@ void application(void){
 	  dev.i2c_slave_address = 0x29;
 
 	  VL53L1_Error status;
-	  VL53L1_RangingMeasurementData_t RangingData;
+
 
 	  status = VL53L1_GetDeviceInfo(Dev, &deviceInfo);
 
@@ -94,10 +96,18 @@ void application(void){
 	         printf("StaticInit fehlgeschlagen\n");
 	     }
 
-	     VL53L1_SetDistanceMode(Dev, 2);  // 1 = Short, 2 = Long
+	     VL53L1_SetDistanceMode(Dev, VL53L1_DISTANCEMODE_LONG);  // 1 = Short, 2 = Long
 	     VL53L1_SetMeasurementTimingBudgetMicroSeconds(Dev, 50000); // z.B. 50 ms
-
-
+	     VL53L1_SetInterruptPolarity(Dev, VL53L1_DEVICEINTERRUPTPOLARITY_ACTIVE_LOW);
+	     VL53L1_set_GPIO_interrupt_config(
+	         Dev,
+	         VL53L1_GPIOINTMODE_DISABLED,   // intr_mode_distance
+	         VL53L1_GPIOINTMODE_DISABLED,   // intr_mode_rate
+	         1,            // interrupt bei neuer Messung
+	         0,                             // no target
+	         0,                             // combined mode
+	         0, 0, 0, 0                     // Schwellenwerte
+	     );
 	     VL53L1_StartMeasurement(Dev);
 
 
@@ -224,6 +234,7 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 // === eEpreuve_1_ChargeEnergy ===
 static void handle_eEpreuve_1_ChargeEnergy_EntryFct(void) {
 	SH1106_ClearDisplay();
+	SH1106_WriteString_AllAtOnce(0, 0, "Charge Energy", FONT_6x8);
 }
 
 static void handle_eEpreuve_1_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
@@ -509,6 +520,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
     if (GPIO_Pin == Rotary_Encoder_SW_Pin){
     	EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_pressed);
+    }
+
+    if (GPIO_Pin == ToF_interrupt_Pin){
+    	EventsBuffer_addData(&myEventBuffer, eNewDistanzValue);
+    	 // Messdaten holen
+    	 VL53L1_GetRangingMeasurementData(Dev, (VL53L1_RangingMeasurementData_t *) &RangingData);
+    	 // Interrupt quittieren + neue Messung starten
+    	 VL53L1_ClearInterruptAndStartMeasurement(Dev);
     }
 }
 

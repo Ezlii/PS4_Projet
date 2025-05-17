@@ -79,6 +79,9 @@ void Error_Handler(void);
 #define Rotary_Encoder_SW_Pin GPIO_PIN_5
 #define Rotary_Encoder_SW_GPIO_Port GPIOC
 #define Rotary_Encoder_SW_EXTI_IRQn EXTI9_5_IRQn
+#define ToF_interrupt_Pin GPIO_PIN_6
+#define ToF_interrupt_GPIO_Port GPIOC
+#define ToF_interrupt_EXTI_IRQn EXTI9_5_IRQn
 #define USB_DM_Pin GPIO_PIN_11
 #define USB_DM_GPIO_Port GPIOA
 #define USB_DP_Pin GPIO_PIN_12

@@ -49,8 +49,13 @@ extern "C" {
 #define USE_STM32WBXX_NUCLEO
 
 /* COM define */
-#define USE_COM_LOG                         1U
-#define USE_BSP_COM_FEATURE                 1U
+#ifndef USE_COM_LOG
+#define USE_COM_LOG 1U
+#endif
+
+#ifndef USE_BSP_COM_FEATURE
+#define USE_BSP_COM_FEATURE 1U
+#endif
 
 /* IRQ priorities */
 #define BSP_BUTTON_SW1_IT_PRIORITY         15U

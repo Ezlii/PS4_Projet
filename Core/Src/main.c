@@ -384,6 +384,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(Rotary_Encoder_SW_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : ToF_interrupt_Pin */
+  GPIO_InitStruct.Pin = ToF_interrupt_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ToF_interrupt_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : USB_DM_Pin USB_DP_Pin */
   GPIO_InitStruct.Pin = USB_DM_Pin|USB_DP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;

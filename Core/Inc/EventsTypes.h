@@ -15,6 +15,7 @@ typedef enum{
 	eRotaryEncoder_pressed,
 	eRotaryEncoder_moved_right,
 	eRotaryEncoder_moved_left,
+	eNewDistanzValue,
 	eTimeTickElapsed_10ms
 }EventsTypes_t;
 
