@@ -103,6 +103,17 @@ void SH1106_Clear(void) {
     }
 }
 
+// Löscht das gesamte Display (Puffer + Anzeige)
+void SH1106_ClearDisplay(void) {
+    // Setze den gesamten Puffer auf 0
+    for (uint16_t i = 0; i < DISPLAY_WIDTH * DISPLAY_PAGES; i++) {
+        display_buffer[i] = 0x00;
+    }
+
+    // Aktualisiere das Display mit dem leeren Puffer
+    SH1106_UpdateDisplay();
+}
+
 
 void Return_Home (void)                                                         //Bei der 1. Zeile ganz am Anfang beginnen
 {

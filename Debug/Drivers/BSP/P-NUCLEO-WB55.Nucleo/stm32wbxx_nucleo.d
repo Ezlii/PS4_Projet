@@ -2,6 +2,7 @@ Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.o: \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.c \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h \
+ ../Core/Inc/stm32wbxx_nucleo_conf.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal.h \
  ../Core/Inc/stm32wbxx_hal_conf.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_dma.h \
@@ -44,6 +45,7 @@ Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.o: \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h:
+../Core/Inc/stm32wbxx_nucleo_conf.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal.h:
 ../Core/Inc/stm32wbxx_hal_conf.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_dma.h:

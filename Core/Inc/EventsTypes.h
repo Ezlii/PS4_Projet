@@ -12,7 +12,7 @@ typedef enum{
 	eButton_1_pressed,
 	eButton_2_pressed,
 	eButton_3_pressed,
-	eRotaryEncoder_prssed,
+	eRotaryEncoder_pressed,
 	eRotaryEncoder_moved_right,
 	eRotaryEncoder_moved_left,
 	eTimeTickElapsed_10ms

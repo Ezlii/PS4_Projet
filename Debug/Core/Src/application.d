@@ -44,10 +44,11 @@ Core/Src/application.o: ../Core/Src/application.c \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h \
- ../Core/Inc/display.h ../Core/Inc/vl53l1_api.h \
- ../Core/Inc/vl53l1_api_strings.h ../Core/Inc/vl53l1_def.h \
- ../Core/Inc/vl53l1_ll_def.h ../Core/Inc/vl53l1_ll_device.h \
- ../Core/Inc/vl53l1_types.h ../Core/Inc/vl53l1_platform_user_config.h \
+ ../Core/Inc/stm32wbxx_nucleo_conf.h ../Core/Inc/display.h \
+ ../Core/Inc/vl53l1_api.h ../Core/Inc/vl53l1_api_strings.h \
+ ../Core/Inc/vl53l1_def.h ../Core/Inc/vl53l1_ll_def.h \
+ ../Core/Inc/vl53l1_ll_device.h ../Core/Inc/vl53l1_types.h \
+ ../Core/Inc/vl53l1_platform_user_config.h \
  ../Core/Inc/vl53l1_error_codes.h ../Core/Inc/vl53l1_register_structs.h \
  ../Core/Inc/vl53l1_register_map.h \
  ../Core/Inc/vl53l1_platform_user_defines.h \
@@ -105,6 +106,7 @@ Core/Src/application.o: ../Core/Src/application.c \
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h:
+../Core/Inc/stm32wbxx_nucleo_conf.h:
 ../Core/Inc/display.h:
 ../Core/Inc/vl53l1_api.h:
 ../Core/Inc/vl53l1_api_strings.h:

@@ -49,7 +49,6 @@ static EventsBuffer_t myEventBuffer;
 static selected_Epreuve_t currentEpreuve;
 static uint32_t selected_height_cm;
 static char height_str[8];
-static uint32_t re_position=10;
 
 /*====================  STATIC FUNCTION PROTOTYPES  ====================*/
 
@@ -172,7 +171,7 @@ static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
 			currentEpreuve = (currentEpreuve > eEpreuve_1) ? currentEpreuve -1 : eEpreuve_3;
 			updateEpreuveDisplay();
 			break;
-		case eRotaryEncoder_prssed:
+		case eRotaryEncoder_pressed:
 			switch(currentEpreuve){
 				case eEpreuve_1:
 					tran(eTR_eEpreuve_1);
@@ -194,7 +193,7 @@ static void handle_eSelectEpreuve(FSM_States_t state, EventsTypes_t event) {
 // === eEpreuve_1 ===
 static void handle_eEpreuve_1_EntryFct(void) {
 	selected_height_cm = 100;
-	SH1106_Clear();
+	SH1106_ClearDisplay();
 	SH1106_WriteString_AllAtOnce(0, 0, "select height in cm:", FONT_6x8);
 	snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
 	SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
@@ -214,7 +213,7 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 			snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
 			SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
 			break;
-		case eRotaryEncoder_prssed:
+		case eRotaryEncoder_pressed:
 			tran(eTR_eEpreuve_1_ChargeEnergy);
 			break;
 		default:
@@ -224,14 +223,14 @@ static void handle_eEpreuve_1(FSM_States_t state, EventsTypes_t event) {
 
 // === eEpreuve_1_ChargeEnergy ===
 static void handle_eEpreuve_1_ChargeEnergy_EntryFct(void) {
-	SH1106_Clear();
+	SH1106_ClearDisplay();
 }
 
 static void handle_eEpreuve_1_ChargeEnergy(FSM_States_t state, EventsTypes_t event) {
 	switch(event){
 		case eTimeTickElapsed_10ms:
 			break;
-		case eRotaryEncoder_prssed:
+		case eRotaryEncoder_pressed:
 			tran(eTR_eEpreuve_1_StartLiftingProcess);
 			break;
 		default:
@@ -284,7 +283,7 @@ static void handle_eEpreuve_1_LowerProcess(FSM_States_t state, EventsTypes_t eve
 // === eEpreuve_2 ===
 static void handle_eEpreuve_2_EntryFct(void) {
 	selected_height_cm = 25;
-	SH1106_Clear();
+	SH1106_ClearDisplay();
 	SH1106_WriteString_AllAtOnce(0, 0, "select height in cm:", FONT_6x8);
 	snprintf(height_str, sizeof(height_str), "%3ld cm", selected_height_cm);
 	SH1106_WriteString_AllAtOnce(0, 2, height_str, FONT_6x8);
@@ -469,7 +468,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
     if (GPIO_Pin == Rotary_Encoder_SCK_Pin || GPIO_Pin == Rotary_Encoder_DT_Pin)
     {
-        uint8_t clk = HAL_GPIO_ReadPin(Rotary_Encoder_SCK_GPIO_Port, Rotary_Encoder_SCK_Pin);
+    	uint8_t clk = HAL_GPIO_ReadPin(Rotary_Encoder_SCK_GPIO_Port, Rotary_Encoder_SCK_Pin);
         uint8_t dt  = HAL_GPIO_ReadPin(Rotary_Encoder_DT_GPIO_Port,  Rotary_Encoder_DT_Pin);
 
         uint8_t new_state = (clk << 1) | dt;
@@ -506,6 +505,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         }
 
         last_state = new_state;
+    }
+
+    if (GPIO_Pin == Rotary_Encoder_SW_Pin){
+    	EventsBuffer_addData(&myEventBuffer, eRotaryEncoder_pressed);
     }
 }
 

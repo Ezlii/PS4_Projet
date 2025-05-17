@@ -41,9 +41,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h \
- ../Core/Inc/display.h ../Core/Inc/application.h \
- ../Core/Inc/EventsTypes.h ../Core/Inc/FSM_Handler.h \
- ../Core/Inc/EventsBuffer.h ../Core/Inc/stm32wbxx_it.h
+ ../Core/Inc/stm32wbxx_nucleo_conf.h ../Core/Inc/display.h \
+ ../Core/Inc/application.h ../Core/Inc/EventsTypes.h \
+ ../Core/Inc/FSM_Handler.h ../Core/Inc/EventsBuffer.h \
+ ../Core/Inc/stm32wbxx_it.h
 ../Core/Inc/main.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal.h:
 ../Core/Inc/stm32wbxx_hal_conf.h:
@@ -87,6 +88,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h:
+../Core/Inc/stm32wbxx_nucleo_conf.h:
 ../Core/Inc/display.h:
 ../Core/Inc/application.h:
 ../Core/Inc/EventsTypes.h:

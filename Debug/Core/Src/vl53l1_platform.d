@@ -51,7 +51,8 @@ Core/Src/vl53l1_platform.o: ../Core/Src/vl53l1_platform.c \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_uart_ex.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h \
  ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h \
- ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h
+ ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h \
+ ../Core/Inc/stm32wbxx_nucleo_conf.h
 ../Core/Inc/vl53l1_platform.h:
 ../Core/Inc/vl53l1_ll_def.h:
 ../Core/Inc/vl53l1_ll_device.h:
@@ -111,3 +112,4 @@ Core/Src/vl53l1_platform.o: ../Core/Src/vl53l1_platform.c \
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_system.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo.h:
 ../Drivers/BSP/P-NUCLEO-WB55.Nucleo/stm32wbxx_nucleo_errno.h:
+../Core/Inc/stm32wbxx_nucleo_conf.h:

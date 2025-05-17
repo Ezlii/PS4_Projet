@@ -22,6 +22,8 @@ void Display_Initialize(void);
 
 void Clear_Display (void);
 
+void SH1106_ClearDisplay(void);
+
 void Return_Home (void);
 
 void send_command_display(uint8_t command);

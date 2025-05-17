@@ -22,7 +22,7 @@
 #define __STM32WBxx_IT_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Private includes ----------------------------------------------------------*/
@@ -60,6 +60,7 @@ void EXTI1_IRQHandler(void);
 void EXTI2_IRQHandler(void);
 void EXTI3_IRQHandler(void);
 void EXTI4_IRQHandler(void);
+void EXTI9_5_IRQHandler(void);
 void TIM2_IRQHandler(void);
 void SPI1_IRQHandler(void);
 /* USER CODE BEGIN EFP */
